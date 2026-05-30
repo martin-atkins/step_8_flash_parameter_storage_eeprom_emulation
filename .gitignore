@@ -1,19 +1,22 @@
 # STM32CubeIDE / build artefacts
 Debug/
 Release/
-*.o
-*.d
-*.su
 *.elf
 *.bin
 *.hex
 *.map
 *.list
+*.o
+*.d
+*.su
 
 # CubeIDE workspace metadata
 .metadata/
-*.launch
 .settings/
+*.launch
+
+# CubeMX backup
+*.bak
 
 # OS noise
 Thumbs.db

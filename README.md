@@ -108,7 +108,9 @@ uint16_t EE_WriteVariable(uint16_t virtAddr, uint16_t data);
 3. To prove wear-levelling/transfer, loop `EE_WriteVariable` thousands of times
    and watch (via debugger) the `VALID_PAGE` header migrate from sector 6 to 7
    and back as pages fill and transfer.
-4. To start clean, call `EE_Format()` once (or mass-erase from the programmer).
+4. To start clean, call `EE_Format()` once (or mass-erase from the programmer).                                                       111 +4. To start clean: **hold the blue USER button (B1) while pressing RESET** — the
+   demo calls `EE_Format()` and the count restarts at 1. (Equivalently, call
+   `EE_Format()` from code, or mass-erase sectors 6 & 7 from the programmer.)
 
 ## Talking points for an interview
 
