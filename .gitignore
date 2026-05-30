@@ -1,0 +1,20 @@
+# STM32CubeIDE / build artefacts
+Debug/
+Release/
+*.o
+*.d
+*.su
+*.elf
+*.bin
+*.hex
+*.map
+*.list
+
+# CubeIDE workspace metadata
+.metadata/
+*.launch
+.settings/
+
+# OS noise
+Thumbs.db
+.DS_Store
