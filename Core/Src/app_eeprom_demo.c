@@ -38,10 +38,35 @@ static void uart_print(const char *s)
   HAL_UART_Transmit(&huart2, (uint8_t *)s, (uint16_t)strlen(s), HAL_MAX_DELAY);
 }
 
+/* Returns 1 if the blue USER button (B1 on PC13) is held down.
+ * On the NUCLEO-F411RE the button pulls PC13 LOW when pressed. */
+static uint8_t user_button_pressed(void)
+{
+  GPIO_InitTypeDef gpio = {0};
+
+  __HAL_RCC_GPIOC_CLK_ENABLE();
+  gpio.Pin  = GPIO_PIN_13;
+  gpio.Mode = GPIO_MODE_INPUT;
+  gpio.Pull = GPIO_PULLUP;
+  HAL_GPIO_Init(GPIOC, &gpio);
+
+  return (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13) == GPIO_PIN_RESET) ? 1U : 0U;
+}
+
+
 void EEPROM_Demo_Init(void)
 {
   /* Flash must be unlocked before any program/erase the driver performs. */
   HAL_FLASH_Unlock();
+
+  /* Factory reset: hold the blue USER button (B1) while pressing RESET to wipe
+   * the emulated EEPROM. EE_Init() below then re-validates the cleared pages,
+   * so the boot counter starts again from 1. */
+  if (user_button_pressed())
+  {
+    EE_Format();
+    uart_print("EEPROM factory-reset (USER button held)\r\n");
+  }
 
   if (EE_Init() != HAL_OK)
   {
