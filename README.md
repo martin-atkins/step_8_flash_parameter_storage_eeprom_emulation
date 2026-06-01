@@ -11,13 +11,12 @@ This is the final hands-on step of the STM32 training track:
 | 1 | GPIO / LED blink | ✅ |
 | 2–5 | Timers, UART, interrupts, FreeRTOS | ✅ |
 | 6 | ADC + DMA acquisition | ✅ |
-| 7 | LoRa RF comms (Nucleo + DX-PJ27) | ✅ |
-| 8 | FreeRTOS scheduling/queues/semaphores | ✅ (done in the LoRa node project) |
-| 9 | Low-power modes (STOP/STANDBY, RTC wakeup) | ✅ (done via DEV-568) |
-| **10** | **Flash / EEPROM emulation** | **← this project** |
-| 11 | USB / advanced comms | optional stretch |
+| 7 | FreeRTOS scheduling/queues/semaphores | ✅ |
+| 7a | LoRa RF comms (Nucleo + DX-PJ27) | ✅ |
+| 7b | Low-power modes (STOP/STANDBY, RTC wakeup) | ✅ (done within LoRa project) |
+| 8 | **Flash / EEPROM emulation** | **← this project** |
 
-## Why emulation (and why this is interview-worthy)
+## Why emulation
 
 The STM32F4 can only erase flash a whole **sector** at a time, and a sector can
 only be erased a finite number of times (~10k cycles). Naively erase-and-rewrite
@@ -108,22 +107,9 @@ uint16_t EE_WriteVariable(uint16_t virtAddr, uint16_t data);
 3. To prove wear-levelling/transfer, loop `EE_WriteVariable` thousands of times
    and watch (via debugger) the `VALID_PAGE` header migrate from sector 6 to 7
    and back as pages fill and transfer.
-4. To start clean, call `EE_Format()` once (or mass-erase from the programmer).                                                       111 +4. To start clean: **hold the blue USER button (B1) while pressing RESET** — the
+4. To start clean: **hold the blue USER button (B1) while pressing RESET** — the
    demo calls `EE_Format()` and the count restarts at 1. (Equivalently, call
    `EE_Format()` from code, or mass-erase sectors 6 & 7 from the programmer.)
-
-## Talking points for an interview
-
-- Difference between **byte-erasable EEPROM (STM32L0/L1)** and **sector-erase
-  flash (F4)**, and why the latter needs emulation.
-- **Wear-levelling** and flash **endurance** (~10k erase cycles/sector) — and how
-  the two-page swap multiplies it.
-- **Power-fail atomicity**: the `RECEIVE_DATA → VALID → erase` ordering and how
-  `EE_Init()` recovers an interrupted transfer.
-- Why writes are **half-word programmed** and why `FLASH_VOLTAGE_RANGE_3` is the
-  correct choice at the Nucleo's 3.3 V.
-- Trade-offs vs. ST's **X-CUBE-EEPROM** package and an external **I²C/SPI FRAM**
-  (unlimited endurance, byte-writable, but extra BOM cost and a bus).
 
 ## Credits / lineage
 
