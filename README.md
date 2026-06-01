@@ -1,4 +1,4 @@
-# STM32 Training — Step 10: Flash / EEPROM Emulation (NUCLEO-F411RE)
+# STM32 Training — Step 8: Flash / EEPROM Emulation (NUCLEO-F411RE)
 
 Persistent key/value storage on an STM32F4, which has **no on-chip EEPROM**. Values
 are kept in flash and survive resets and power cycles, using a two-sector
